@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+<h1>Stations</h1>
+{% for station in stations %}
+  <h2>{{ station.name }}</h2>
+  <ul>
+      <li>
+        <strong>Station Name:</strong> {{ station.id }}<br>
+        <strong>Station ID:</strong> {{ station.phone }}<br>
+        <!-- 添加更多站点的数据 -->
+      </li>
+  </ul>
+{% endfor %}
+
+
+
+<a href="{% url 'list3' %}" target="_blank" role="button">傻逼点这里</a>
+
+<a href="{% url 'datas' stations_id=1 %}">View Data</a> 
+
+
+
+</body>
+<script>  
+
+
+</script>
+
+
+</html>

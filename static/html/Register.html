@@ -1,0 +1,100 @@
+{% load staticfiles %}
+<!-- <html lang="en"> -->
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/css/Login.css" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <title>Login Page</title>
+</head>
+<body>
+    <div class="login-container">
+        <h1 style="font-weight:bolder">欢迎注册！</h1>
+        <form>
+            <div class="form-group">
+                <label for="username">邮件地址:</label>
+                <input type="text" id="username" name="username" required>
+                <div id="email"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码:</label>
+                <input type="password" id="password1" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="password">再次输入密码:</label>
+                <input type="password" id="password2" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="verification_code">验证码:</label>
+                <input type="text" id="verification_code" name="verification_code"placeholder="请输入验证码">
+                <img class="identifyCode" title="点击重新获取" onclick="this.setAttribute('src','verification_code?random='+Math.random())" src="{% url 'verification_code' %}" alt="verification code">
+            </div>
+        
+
+            <button type="button" id="submitBtn">注册</button>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#submitBtn').click(function () {//点击提交按钮,提交按钮的id为submitBtn
+                var username = $('#username').val();
+                var password1 = $('#password1').val();
+                var password2 = $('#password2').val();
+                var verification_code = $('#verification_code').val();
+                var cookie = document.cookie;
+                // 通过fetch函数向后端发送注册信息
+                fetch('/reg_msg/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json;charset=UTF-8'
+                        //
+                    },
+                    body: JSON.stringify({
+                        'username': username,
+                        'password1': password1,
+                        'password2': password2,
+                        'verification_code': verification_code,
+                        'cookie': cookie
+                    })
+                }).then(function (response) {
+                    // 处理响应结果
+                    if (response.status == 200){
+                        alert('注册发送成功！');
+                        // window.location.href = '/Login';
+                    }
+                    return response.json();
+                }).then(function (data) {
+                    // 处理返回的数据
+                   
+                    if (data['result'] == '成功'){
+                        alert(data['result']);
+                        window.location.href = '/Login';
+                    }
+                    if (data['result']=="email_hasbeen_registered"){
+                        var ss=document.getElementById("email");
+                        ss.innerHTML="邮箱已被注册！";
+                        ss.innerHTML.style.color="red";
+                        ss.innerHTML.style.fontSize="10px";
+                        ss.innerHTML.style.fontWeight="bold";
+                        }
+                    if (data['result']=="验证码错误")
+                    {
+                        alert(data['result']);
+                    }
+                    if (data['result']=="邮箱或密码不符合要求")
+                    {
+                        alert(data['result']);
+                    }
+                    else{
+
+                    }
+                }).catch(function (error) {
+                    // 处理错误
+                    
+                });
+            });
+        });
+    </script>
+</body>
+</html>

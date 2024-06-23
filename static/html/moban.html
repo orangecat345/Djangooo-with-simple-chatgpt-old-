@@ -1,0 +1,127 @@
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>
+   ChatGPT 3.5
+  </title>
+  <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" rel="stylesheet"/>
+  <style>
+   body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            background-color: #333;
+            color: #fff;
+        }
+        .chat-container {
+            height: calc(100vh - 56px);
+            overflow-y: auto;
+        }
+        .chat-message {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        .chat-message.sent .message-content,
+        .chat-message.received .message-content {
+            max-width: 75%;
+            padding: 10px;
+            border-radius: 20px;
+            margin: 5px;
+        }
+        .chat-message.sent .message-content {
+            background-color: #007bff;
+            color: white;
+        }
+        .chat-message.received .message-content {
+            background-color: #e9ecef;
+            color: black;
+        }
+        .message-box {
+            resize: none;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 20px;
+            border: 1px solid #ced4da;
+        }
+        .send-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 20px;
+        }
+        .user-panel img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        .user-panel {
+            padding: 10px;
+            background-color: #333;
+        }
+        .list-group-item {
+            background-color: #333;
+            border: none;
+        }
+        .list-group-item a {
+            color: #fff;
+            text-decoration: none;
+        }
+        .list-group-item.active {
+            background-color: #444;
+            color: #fff;
+        }
+        .list-group-item:not(.active):hover {
+            background-color: #444;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+        }
+  </style>
+ </head>
+ <body>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-3 sidebar d-none d-md-block">
+     <!-- Sidebar content -->
+     <div class="user-panel d-flex align-items-center justify-content-between px-3">
+      <img alt="Placeholder image of a user avatar" class="img-fluid" src="https://placehold.co/50x50"/>
+      <span>
+       用户名
+      </span>
+     </div>
+     <!-- ... -->
+    </div>
+    <div class="col-12 col-md-9">
+     <div class="chat-container p-3">
+      <!-- Chat messages will be displayed here -->
+      <div class="chat-message sent">
+       <div class="message-content">
+        Hi, how can I help you today?
+       </div>
+      </div>
+      <div class="chat-message received">
+       <div class="message-content">
+        I have a question about my account.
+       </div>
+      </div>
+      <!-- Repeat for each message -->
+     </div>
+     <div class="message-input px-3">
+      <textarea class="message-box" placeholder="Type your message here..."></textarea>
+      <button class="send-button">
+       Send
+      </button>
+     </div>
+    </div>
+   </div>
+  </div>
+ </body>
+</html>

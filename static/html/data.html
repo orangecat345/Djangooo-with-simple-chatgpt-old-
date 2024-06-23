@@ -1,0 +1,24 @@
+<!-- data_details.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Details</title>
+</head>
+<body>
+    <h1>Data Details for {{ station.name }}</h1>
+
+    <ul>
+            <li>
+                <p>Temperature: {{ data.temperature }}</p>
+                <p>Humidity: {{ data.humidity }}</p>
+                <p>Wind: {{ data.wind }}</p>
+                <p>PM: {{ data.pm }}</p>
+                <p>Time: {{ data.time }}</p>
+                <!-- Add other data fields as needed -->
+            </li>
+    </ul>
+</body>
+</html>

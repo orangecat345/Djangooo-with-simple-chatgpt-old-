@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Solver</title>
+</head>
+<body>
+      <form id="questionForm">
+        <label for="question">Enter your question:</label>
+        <input type="text" id="question" name="question" required>
+        <button type="button" onclick="submitQuestion()">Submit</button>
+    </form> 
+
+     <div id="answerResult"></div> 
+
+      <script>
+        function submitQuestion() {
+            var question = document.getElementById('question').value;
+
+            // 发送问题到后端
+            fetch('api/solve_question/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ question: question }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 显示后端返回的答案
+                document.getElementById('answerResult').innerText = 'Answer: ' + data.answer;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>  
+</body>
+</html>

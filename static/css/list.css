@@ -1,0 +1,11 @@
+body{
+    background-color: #1f2dad;
+}
+
+.head{
+    background-color: #8e922d;
+    color: #fff;
+    font-size: 30px;
+    text-align: center;
+    padding: 10px;
+}

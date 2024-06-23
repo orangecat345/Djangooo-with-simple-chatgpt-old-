@@ -1,0 +1,49 @@
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="/static/images/tubiao.png" rel="icon" type="image/x-icon">
+    <link href="/static/css/main.css" rel="stylesheet" type="text/css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login and Register</title>
+</head>
+<body>
+    <div class="head">
+        <div class="head_left">
+            ChatGPT
+        </div>
+        <div class="head_right">
+            <!-- <a href="http://127.0.0.1:8000/Login" target="_blank" class="button-link"> -->
+                <button onclick="location.href='/register'" target="_blank" class="button-link type="button">Register</button>
+                <button onclick="location.href='/Login'" target="_blank" class="button-link type="button">Login</button>
+                <!-- <button class="button" ">Login</button> -->
+            <!-- </a> -->
+            <!-- <a href="http://127.0.0.1:8000/Register" target="_blank" class="button-link"> -->
+                
+            <!-- </a> -->
+        </div>
+    </div>
+
+    <div class="body">
+
+        <div class="body_left">
+            <div class="body_left_title">
+                ChatGPT-3.5
+            </div>
+            <div class="body_left_text">
+                <p>Get instant answers, find creative inspiration, learn something new.</p>
+            </div>
+        </div>
+        <div class="body_right">
+            <div class="body_right_first">
+                <img src="/static/images/111.svg" class="body_right_img1">
+            </div>
+            <div class="body_right_second">
+                <img src="/static/images/222.svg" class="body_right_img2">
+            </div>
+
+        </div>
+
+    </div>
+</body>
+</html>

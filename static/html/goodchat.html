@@ -1,0 +1,220 @@
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Next</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #F7F7F7;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+        }
+        .chat-container {
+            display: flex;
+            height: 100%;
+        }
+        .sidebar {
+            background-color: #00B4D8;
+            color: white;
+            padding: 1rem;
+            width: 300px;
+        }
+        .chat-area {
+            flex-grow: 1;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .chat-header {
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        .message {
+            padding: 0.5rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 20px;
+            max-width: 70%;
+        }
+        .message.incoming {
+            background-color: #D1FAE5;
+            align-self: flex-start;
+        }
+        .message.outgoing {
+            background-color: #FEF3C7;
+            align-self: flex-end;
+        }
+        .message .metadata {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #6B7280;
+            margin-top: 0.5rem;
+        }
+        .chat-footer {
+            display: flex;
+            align-items: center;
+        }
+        .chat-footer input {
+            flex-grow: 1;
+            margin-right: 0.5rem;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 20px;
+        }
+        .chat-footer button {
+            background-color: #10B981;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+        .chat-footer button:hover {
+            background-color: #059669;
+        }
+        .chat-footer i {
+            color: #6B7280;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+
+        <div class="sidebar">
+            <div class="user-panel d-flex align-items-center justify-content-between px-3">
+                <img alt="Placeholder image of a user avatar" class="img-fluid" src="https://placehold.co/50x50">
+                <span>
+                 用户名
+                </span>
+               </div>
+            <h2>ChatGPT Next</h2>
+            <p>Build your own AI assistant.</p>
+            <div class="user">
+                <p>用户</p>
+                <span>88 通话</span>
+            </div>
+            <div class="user active">
+                <p>大白的回话</p>
+                <span>2 通话记录</span>
+                <span>2023/12/21 20:13:17</span>
+            </div>
+        </div>
+        <div class="chat-area">
+            <div class="chat-header">
+                <h3>大白的回话</h3>
+                <p>共 2 通话记录</p>
+            </div>
+            <div class="chat-messages">
+                <div class="message incoming">
+                    <p>你有什么可以帮助的</p>
+                    <div class="metadata">
+                        <span>大白的回话</span>
+                        <span>2023/12/21 20:13:15</span>
+                    </div>
+                </div>
+                <div class="message outgoing">
+                    <p>嗨喽，作为一个AI助理，我可以帮助解决很多的问题。你可以尝试发送“天气怎么样”或者“讲个笑话”来开始我们的对话。不要害羞，就当你有一个随时待命的朋友!</p>
+                    <div class="metadata">
+                        <span>用户</span>
+                        <span>2023/12/21 20:13:29</span>
+                    </div>
+                </div>
+
+            </div>
+            <div class="chat-footer">
+                <i class="far fa-grin"></i>
+                <input type="text" id=inputText placeholder="输入消息...">
+                <button type="button" id="submitBtn">发送</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            var counter=1;
+            $('#submitBtn').click(function () {
+                var inputText = $('#inputText').val();
+                function displayConversation(data, role,flag,counter) {
+                    // if (".None" in data)
+                    // {
+                    // }
+                    // Append a new div for the entire conversation
+                    if (flag==1){
+                        var outputDiv = document.getElementById("responseBIGcontainer");
+                        var conversationDiv = document.createElement('div');
+                        conversationDiv.id = "responseContainer"+counter.toString(10);
+                        conversationDiv.className = 'border p-3';
+                        conversationDiv.innerHTML = role + ': ' + data;
+                        outputDiv.appendChild(conversationDiv);
+                    }
+                    if (flag>=2){
+                        var conversationDiv = document.getElementById("responseContainer"+counter.toString(10));
+                        conversationDiv.innerHTML = role + ': ' + data;
+                    }
+                    // Append the conversation div to the output container
+                    // if (flag== 0)
+                    // {
+                    //     var outputDiv = document.getElementById("responseBIGcontainer");
+                    // }
+                }
+                fetch('/chatui/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({'input': inputText}),
+                }).then(function (response) {
+                    // 确保响应状态码正常
+                    if (!response.ok) {
+                        throw new Error('Response failed');
+                    }
+    
+                    // 使用响应的 ReadableStream 来处理数据
+                    var reader = response.body.getReader();
+                    var role = 'gpt';
+                    var conversationData = '';
+                    function read() {
+                        return reader.read().then(function (result) {
+                            // 处理读取到的数据
+                            if (!result.done) {
+                                var value = result.value;
+                                // 在这里处理接收到的数据，例如更新页面上的内容
+                                var decoder = new TextDecoder('utf-8');
+                                var chunk = decoder.decode(value);
+                                
+                                conversationData += chunk;
+                                
+                                //收到一个chunk后，就显示一次对话
+                                if (conversationData==chunk)
+                                    {
+                                        displayConversation(conversationData, role,1,counter);
+                                    }
+                                
+                                displayConversation(conversationData, role,2,counter);
+                                // 继续读取下一块数据
+                                return read();
+                            } else {
+                                // Conversation ended, display the entire conversation
+                                // displayConversation(conversationData, role,0);
+                                counter+=1;
+                                // Switch role for the next conversation
+                                role = (role === 'gpt') ? 'user' : 'gpt';
+                                conversationData = '';  // Reset for the next conversation
+                            }
+                        });
+                    }
+                    return read();
+                }).catch(function (error) {
+                    // 处理错误
+                    
+                });
+            });
+        });
+    </script>
+</body>
+</html>

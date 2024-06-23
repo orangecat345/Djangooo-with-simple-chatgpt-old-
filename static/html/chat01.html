@@ -1,0 +1,694 @@
+{% load staticfiles %}
+<html lang="en">
+<!-- <h>create by holiady</h> -->
+<link href="/static/images/tubiao.png" rel="icon" type="image/x-icon">
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        background-color: #F7F7F7;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+    }
+    .chat-container {
+        display: flex;
+        height: 100%;
+    }
+    .sidebar {
+        background-color: #00B4D8;
+        color: white;
+        padding: 1rem;
+        width: 300px;
+    }
+    .chat-area {
+        flex-grow: 1;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .chat-header {
+        font-weight: 500;
+        margin-bottom: 1rem;
+    }
+    .message {
+        padding: 0.5rem 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 20px;
+        max-width: 70%;
+    }
+    .message.incoming {
+        background-color: #D1FAE5;
+        align-self: flex-start;
+    }
+    .message.outgoing {
+        background-color: #FEF3C7;
+        align-self: flex-end;
+    }
+    .message .metadata {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: #6B7280;
+        margin-top: 0.5rem;
+    }
+    .chat-footer {
+        position: absolute;
+        margin-left: 20vw;
+        display: flex;
+        align-items: center;
+        transition: 1s;
+        width: 80vw;
+        /* height: 79vh; */
+    }
+    .chat-footer input {
+        /* flex-grow: 1; */
+        margin-right: 1vw;
+        width: 40vw;
+        padding: 0.5rem;
+        border: 4px ;
+        border-image-source: linear-gradient(to right, #8f41e9, #578aef);
+        border-image-slice: 1;
+        transition: 1s;
+        /* border-radius: 20px; */
+    }
+    .chat-footer button {
+        background-color: #10B981;
+        color: white;
+        border: none;
+        transition: 1s;
+        /* flex-grow: 1; */
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        float: left;
+
+    }
+    .chat-footer button:hover {
+        background-color: #059669;
+        
+    }
+    .chat-footer i {
+        color: #6B7280;
+        margin-right: 0.5vw;
+        transition: 1s;
+        /* flex-grow: 1; */
+    }
+</style>
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+    }
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Roboto', sans-serif;
+        /* background-color: #10b98175; */
+        /* background-image: linear-gradient(to right, #8f41e9, #578aef); */
+        /* 淡绿色灰渐变自上而下 */
+        
+        height: 100vh;
+    }
+    .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-group {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+<style>
+    * {
+      margin: 0;
+       padding: 0;
+       }
+    .out{
+        background-color: lightyellow;
+        
+        /* background: url(./img/beij.jpg)  no-repeat ; */
+        background-size: cover;
+        width: 100vw;
+        height: 100vh;
+        transition: 1s;
+    }
+    .menu-content{
+         width: 20vw; 
+        height: 100vh; 
+        /* background-color: aquamarine; */
+        /* position: relative; */
+        float: left;
+    }
+    .menu{
+        width: 20vw;
+        height: 100vh; 
+        /* 反方向渐变使得其中央部分颜色一致向两侧变化 */
+        border: 4px solid;
+        border-image-source: linear-gradient(to left, #0c750c80, #578aef);
+        border-image-slice: 1;
+        background-color: #10b98116;
+        opacity: 0.8;
+        overflow: hidden;
+        /* display: flex; */
+        transition: 1s;
+        
+    }
+    .title{
+        width: auto;
+        height: auto;
+        margin-left: 3vw;
+        margin-top: 5vw;
+        color: #dac5a5;
+        /* overflow-y: ; */
+    }
+    .menu-content>label{
+      background-color: green;
+      background-image: linear-gradient(0deg, lightgreen, #dac5a5 100%);   
+      position: absolute;
+      top: 50vh;
+      left: 20%;
+      width: 5vh;
+      height: 5vh;
+      border-radius: 50%;
+      z-index: 5;
+      font-size: 2vw;
+    }
+    .menu-content>label i{
+        margin-left: 5px;
+        
+        
+    }
+    input#btn:checked~label{
+        transform: rotateY(180deg);              /*旋转图标*/
+    }
+    input#btn:checked ~.menu {
+        transition: 1s;
+    }
+    input[type="checkbox"]  {
+        display: none;
+    }
+
+    div.item1-content,div.item2-content,div.item3-content{
+        width: 100px;
+        height: 0;
+        overflow: hidden;
+        transition: 0.8s;
+    }
+    input#item1:checked~.item1-content,  input#item3:checked~.item3-content{
+        width: 20vw;
+        height: 24vh;
+       
+        transition: 0.8s;
+
+    }
+    input#item2:checked~.item2-content{
+        width: 20vw;
+        height: 48vh;
+        transition: 0.8s;
+        overflow: scroll;
+    }
+    .menu>label>div{
+        width: 20vw;
+        height: 4vh;
+        margin-left:2vw;
+        margin-top: 1vh;
+        font-size: 2vw;
+        color: #9b7538;
+    }
+    /* .menu .item1-content,.item2-content,.item3-content{
+        margin: 0 30px;
+       
+    } */
+    .menu .item1-content div,.item2-content div,.item3-content div{
+        font-size: 2vw;
+        color: #96866D;
+        text-align: center;
+        margin: 3px 0;
+    }
+       .menu  .item1-content>div:hover,.item2-content>div:hover,.item3-content>div:hover{
+        cursor:pointer;
+        background-color: rgba(12, 87, 199, 0.473);
+    }
+    .containermt-5{
+        
+        /* background-color: aquamarine; */
+       float: left;
+        /* margin-left: 20%; */
+        height: 100vh;  
+        width: 80vw;
+        /* background-image: linear-gradient(to right,#11aa2da5 100%, #b4b4b4a5 ); */
+    }
+    #responseBIGcontainer{
+        width: 80vw;
+        height:78vh;
+        overflow: auto;
+    }
+    #inputText.change::placeholder{
+            color: orangered;
+            /* 淡黑色 */
+            
+        }
+    .rowmt{
+        height: 80vh;
+        float: left;
+        width: 80vw;
+    }
+    .row11{
+        height: 20vh;
+        float: left;
+        width: 80vw;
+        transition: 1s;
+        /* margin-left: 5vw; */
+    }
+    .icon-jiantouyou{
+        font-size: 20px;
+        /* background-color: blue; */
+        color: black;
+    }
+    .col-md-6{
+        /* background-color: aquamarine; */
+        transition: 1s;
+    }
+    .containermt-5{
+        transition: 1s;
+        background-color: rgba(234, 255, 224, 0.563);
+    }
+    #right_container.expanded {
+    width: 80vw;
+    transition: 1s;
+}
+    .border{
+        border: 4px solid;
+        border-image-source: linear-gradient(to left, #8f41e9, #578aef);
+        border-image-slice: 1;
+        border-radius: 20px;
+        background-color: #d1fae556;
+    }
+    #name_position{
+        
+        font-size: 3vw;
+        color: #96866D;
+    }
+    #history1,#history2,#history3{
+        font-size: 2vw;
+        color: #96866D;
+        margin-left: 2vw;
+        margin-top: 1vh;
+        height: 12vh;
+        width: 18vw;
+        overflow: scroll;
+
+    }
+    .p-3{
+        font-size: 2vw;
+        white-space: pre-wrap;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT UI</title>
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+</head>
+<body>
+    <div class="out">
+        <div class="menu-content" id="menu-div">
+            <input type="checkbox" id="btn">
+            <label for="btn" id="zhankai">
+                <i class="iconfont icon-jiantouyou"></i>
+          </label>
+            <div class="menu" id ="menu-all">
+                <div class="title" >
+                    <h1 id="name_position">欢迎</h1>
+                    <a id="user_name" style="word-wrap: break-word;color:lightcoral;">default</a>
+                </div>
+ 
+                <input type="checkbox" id="item1">
+                <label for="item1">
+                    <div><i class="iconfont icon-a-jiaoyifangshi2x">&nbsp;账户情况</i></div>
+                </label>
+                <div class="item1-content">
+                    <div id="logout" onclick="111">登出</div>
+                    <div id="money" >账户余额：</div>
+                    <div id="power_man">普通用户</div>
+                </div>
+ 
+                <input type="checkbox" id="item2">
+                <label for="item2">
+                    <div><i class="iconfont icon-a-fenleitongji2x">&nbsp;历史记录</i></div>
+                </label>
+                <div class="item2-content">
+                    <div id="history1"></div>
+                    <div id="history2"></div>
+                    <div id="history3"></div>
+ 
+ 
+                </div>
+ 
+                <!-- <input type="checkbox" id="item3">
+                <label for="item3">
+                    <div><i class="iconfont icon-a-dingdanguanli2x">&nbsp;菜单项三</i></div>
+                </label>
+                <div class="item3-content">
+                    <div>小菜单1</div>
+                    <div>小菜单2</div>
+                    <div>小菜单3</div>
+ 
+ 
+                </div> -->
+               
+                
+            </div>
+        </div>
+    
+    <div class="containermt-5" id="right_container" >
+        <div class="rowmt">
+        <div class="col-md-6 offset-md-3" id="responseBIGcontainer">
+        </div>
+    </div>
+    <div class="row11">
+            <!-- <div class="chat-footer">
+                <div class="inputText">
+                <label for="inputText"></label>
+                <i class="far fa-grin"></i>
+                <textarea  id="inputText" placeholder="在这里输入内容"></textarea>
+                </div>
+                <div class="submitBtn">
+                <button type="button" id="submitBtn" class="btn btn-primary">提交</button>
+                </div>
+            </div> -->
+            <div class="chat-footer">
+                <i class="far fa-grin"></i>
+                <input type="text" id="inputText" class="tex" placeholder="输入消息...">
+                <button type="button" id="submitBtn">发送</button>
+            </div>
+       
+    </div>
+        </div>
+    </div>
+<script>
+    $(document).ready(function () {
+        var flag=0;
+        // flag用来确定当前页面是空白还是有历史记录或者聊天记录
+        var history1;
+        var history2;
+        var history3;
+        var counter=1;
+        // 点击history1，history2，history3，将对应的历史记录显示在对话框中
+        $('#history1').click(function () {
+            var i=1;
+            // 页面不为空删除
+            counter=1;
+            var ss="responseBIGcontainer";
+            var div=document.getElementById(ss);
+            while(div.hasChildNodes())
+            {
+                div.removeChild(div.firstChild);
+            }
+            var div_main=document.createElement('div');
+            div_main.id="responseContainer"+counter.toString(10);
+            div_main.className='border p-3';
+            div_main.innerHTML=history1;
+            div.appendChild(div_main);
+            counter+=1;
+            // 作为子元件添加到对话框中
+        });
+        $('#history2').click(function () {
+            var i=1;
+            counter=1;
+            var ss="responseBIGcontainer";
+            var div=document.getElementById(ss);
+            while(div.hasChildNodes())
+            {
+                div.removeChild(div.firstChild);
+            }
+            var div_main=document.createElement('div');
+            div_main.id="responseContainer"+counter.toString(10);
+            div_main.className='border p-3';
+            div_main.innerHTML= history2;
+            div.appendChild(div_main);
+            counter+=1;
+            
+        });
+        $('#history3').click(function () {
+            var i=1;
+            counter=1;
+            var ss="responseBIGcontainer";
+            var div=document.getElementById(ss);
+            while(div.hasChildNodes())
+            {
+                div.removeChild(div.firstChild);
+            }
+            var div_main=document.createElement('div');
+            div_main.id="responseContainer"+counter.toString(10);
+            div_main.className='border p-3';
+            div_main.innerHTML=history3;
+            div.appendChild(div_main);
+            counter+=1;
+            
+        });
+        // 点击登出按钮，发送post请求到服务器，清除cookie
+        $('#logout').click(function () {
+            fetch('/logout/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8'
+                },
+                body: JSON.stringify({
+                    cookie: document.cookie
+                }),
+            }).then(function (response) {
+                // 处理响应结果
+                if (!response.ok) {
+                    // throw new Error('Response failed');
+                    alert('Response failed 用户非法访问！');
+                    window.location.href = '/Login';
+                }
+                return response.json();
+            }).then(function (data) {
+                window.location.href = '/Login';
+            }).catch(function (error) {
+                // 处理错误
+                window.location.href = '/Login';
+            });
+        });
+        // 页面加载完成后发送post请求从服务器中获取用户名，账户余额等信息
+        fetch('/get_username/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify({
+                cookie: document.cookie
+            }),
+        }).then(function (response) {
+            // 处理响应结果
+            if (!response.ok) {
+                // throw new Error('Response failed');
+                alert('Response failed 用户非法访问！');
+                // window.location.href = '/Login';
+            }
+            return response.json();
+        }).then(function (data) {
+            // 处理返回的数据
+            // alert(data.username);
+            // 将用户名显示在页面上
+            var user_name = document.getElementById("user_name");
+            var money = document.getElementById("money");
+            var superuser=document.getElementById("power_man")
+            user_name.innerHTML = data["result"];
+            money.innerHTML = "账户余额："+data["money"];
+            if (data["result"] == "未登录") {
+                alert("用户未登录！");
+                window.location.href = '/Login';
+            }
+            if (data["superuser"]=="普通用户"){
+                superuser.innerHTML="普通用户";
+            }
+            if (data["superuser"]=="管理员"){
+                superuser.innerHTML="管理员";
+            }
+            
+        }).catch(function (error) {
+            // 处理错误
+            alert(error);
+        });
+        fetch('get_history/',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8'
+            },
+            body: JSON.stringify({
+                cookie: document.cookie
+            }),
+        }).then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            var history11=document.getElementById("history1");
+            var history22=document.getElementById("history2");
+            var history33=document.getElementById("history3");
+            history11.innerHTML="较早记录:"+data["history1"];
+            history22.innerHTML="最近记录:"+data["history2"];
+            history33.innerHTML="上一次记录:"+data["history3"];
+            history1=data["history1"];
+            history2=data["history2"];
+            history3=data["history3"];
+        })
+        .catch(function (error) {
+            alert(error);
+        });
+        // 检测按钮点击事件，点击历史记录后切换到对应的历史记录
+        
+        $('#submitBtn').click(function () {
+            // 禁止空消息并显示在对话框placeholder中
+            // 设置::placeholder为红色
+
+            var inputText = $('#inputText').val();
+            if (inputText == '') {
+                var input = document.querySelector("#inputText");
+                input.setAttribute("placeholder", "输入不能为空！");
+                input.setAttribute('class', 'tex change');
+                return;
+            }
+            var Divbig = document.getElementById("responseBIGcontainer");
+            flag=1;
+            // 将发送的信息添加到对话框中
+            var Divsmall = document.createElement('div');
+            Divsmall.id = "responseContainer"+counter.toString(10);
+            Divsmall.className = 'border p-3';
+            Divsmall.innerHTML = 'user: ' + inputText;
+            Divbig.appendChild(Divsmall);
+            // 将对话框滚动到最底部
+            Divbig.scrollTop = Divbig.scrollHeight;
+            counter+=1;
+            function displayConversation(data, role,flag,counter) {
+                // if (".None" in data)
+                // {
+                // }
+                // Append a new div for the entire conversation
+                var outputDiv = document.getElementById("responseBIGcontainer");
+                if (flag==1){
+                    var conversationDiv = document.createElement('div');
+                    conversationDiv.id = "responseContainer"+counter.toString(10);
+                    conversationDiv.className = 'border p-3';
+                    conversationDiv.innerHTML = role + ': ' + data;
+                    outputDiv.appendChild(conversationDiv);
+                    // 将对话框滚动到最底部
+                    outputDiv.scrollTop = outputDiv.scrollHeight;
+                }
+                if (flag>=2){
+                    var conversationDiv = document.getElementById("responseContainer"+counter.toString(10));
+                    conversationDiv.innerHTML = role + ': ' + data;
+                    // 将对话框滚动到最底部
+                    //conversationDiv.scrollTop = conversationDiv.scrollHeight;
+                }
+                // Append the conversation div to the output container
+                // if (flag== 0)
+                // {
+                //     var outputDiv = document.getElementById("responseBIGcontainer");
+                // }
+                // 输入完之后清空对话框
+                
+                outputDiv.scrollTop = outputDiv.scrollHeight;
+            }
+            fetch('/chatui/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'input': inputText}),
+            }).then(function (response) {
+                // 确保响应状态码正常
+                if (!response.ok) {
+                    throw new Error('Response failed');
+                }
+
+                // 使用响应的 ReadableStream 来处理数据
+                var reader = response.body.getReader();
+                var role = 'gpt';
+                var conversationData = '';
+                function read() {
+                    return reader.read().then(function (result) {
+                        // 处理读取到的数据
+                        if (!result.done) {
+                            var value = result.value;
+                            // 在这里处理接收到的数据，例如更新页面上的内容
+                            var decoder = new TextDecoder('utf-8');
+                            var chunk = decoder.decode(value);
+                            
+                            conversationData += chunk;
+                            
+                            //收到一个chunk后，就显示一次对话
+                            if (conversationData==chunk)
+                                {
+                                    displayConversation(conversationData, role,1,counter);
+                                }
+                            
+                            displayConversation(conversationData, role,2,counter);
+                            // 继续读取下一块数据
+                            return read();
+                        } else {
+                            // Conversation ended, display the entire conversation
+                            // displayConversation(conversationData, role,0);
+                            counter+=1;
+                            // Switch role for the next conversation
+                            role = (role === 'gpt') ? 'user' : 'gpt';
+                            conversationData = '';  // Reset for the next conversation
+                        }
+                    });
+                }
+                $('#inputText').val('');
+                // 还原对话框placeholder
+                var input = document.querySelector("#inputText");
+                input.setAttribute("placeholder", "输入消息...");
+                input.setAttribute('class', 'tex');
+
+                return read();
+            }).catch(function (error) {
+                // 处理错误
+                
+            });
+        });
+        $(document).ready(function () {
+    // ... 其他代码 ...
+
+    $('#zhankai').click(function () {
+        var mmme = document.getElementById('menu-all');
+        var mmmediv = document.getElementById('menu-div');
+        var rctainer = document.getElementById('right_container');
+        this.style.transition = "1s";
+        if (mmme.style.width == "0px") {
+            // 菜单展开时
+            mmme.style.transition = "1s";
+            mmme.style.width = "20vw";
+            this.style.left = "20%";
+            mmmediv.style.width = "20vw";
+            rctainer.classList.add("expanded");
+        } else {
+            // 菜单折叠时
+            mmme.style.transition = "none";
+            mmme.style.width = "0px";
+            this.style.left = "0%";
+            mmmediv.style.width = "0px";
+            rctainer.classList.remove("expanded");
+        }
+    });
+
+    // ... 其他代码 ...
+});
+
+    });
+    </script>
+</body>
+</html>
