@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+create by 橘头肥猫
+<style>
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .form-group {
+        text-align: center;
+        margin-top: 20px;
+    }
+</style>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT UI</title>
+    <!-- <link rel="stylesheet" type="text/css" href="http://119.8.29.71/bootstrap.css"> -->
+    <link href="./static/bootstrap.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row mt-3">
+        <div class="col-md-6 offset-md-3" id="responseBIGcontainer">
+            
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="form-group">
+                <label for="inputText"></label>
+                <textarea class="form-control" id="inputText" placeholder="在这里输入内容"></textarea>
+                <button type="button" id="submitBtn" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var counter=1;
+        $('#submitBtn').click(function () {
+            var inputText = $('#inputText').val();
+            function displayConversation(data, role,flag,counter) {
+                // if (".None" in data)
+                // {
+                // }
+                // Append a new div for the entire conversation
+                if (flag==1){
+                    var outputDiv = document.getElementById("responseBIGcontainer");
+                    var conversationDiv = document.createElement('div');
+                    conversationDiv.id = "responseContainer"+counter.toString(10);
+                    conversationDiv.className = 'border p-3';
+                    conversationDiv.innerHTML = role + ': ' + data;
+                    outputDiv.appendChild(conversationDiv);
+                }
+                if (flag>=2){
+                    var conversationDiv = document.getElementById("responseContainer"+counter.toString(10));
+                    conversationDiv.innerHTML = role + ': ' + data;
+                }
+                // Append the conversation div to the output container
+                // if (flag== 0)
+                // {
+                //     var outputDiv = document.getElementById("responseBIGcontainer");
+                // }
+            }
+            fetch('/chatui/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({'input': inputText}),
+            }).then(function (response) {
+                // 确保响应状态码正常
+                if (!response.ok) {
+                    throw new Error('Response failed');
+                }
+
+                // 使用响应的 ReadableStream 来处理数据
+                var reader = response.body.getReader();
+                var role = 'gpt';
+                var conversationData = '';
+                function read() {
+                    return reader.read().then(function (result) {
+                        // 处理读取到的数据
+                        if (!result.done) {
+                            var value = result.value;
+                            // 在这里处理接收到的数据，例如更新页面上的内容
+                            var decoder = new TextDecoder('utf-8');
+                            var chunk = decoder.decode(value);
+                            
+                            conversationData += chunk;
+                            
+                            //收到一个chunk后，就显示一次对话
+                            if (conversationData==chunk)
+                                {
+                                    displayConversation(conversationData, role,1,counter);
+                                }
+                            
+                            displayConversation(conversationData, role,2,counter);
+                            // 继续读取下一块数据
+                            return read();
+                        } else {
+                            // Conversation ended, display the entire conversation
+                            // displayConversation(conversationData, role,0);
+                            counter+=1;
+                            // Switch role for the next conversation
+                            role = (role === 'gpt') ? 'user' : 'gpt';
+                            conversationData = '';  // Reset for the next conversation
+                        }
+                    });
+                }
+                return read();
+            }).catch(function (error) {
+                // 处理错误
+                
+            });
+        });
+    });
+</script>
+</body>
+</html>
