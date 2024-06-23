@@ -1,0 +1,1 @@
+# Djangooo-with-simple-chatgpt-old-
